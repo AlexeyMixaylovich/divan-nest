@@ -63,9 +63,9 @@ export class ProductService {
 
     const products = await this.productModel
       .find(filters)
+      .sort(sortObject)
       .skip(navigate.skip)
       .limit(navigate.limit || 100)
-      .sort(sortObject)
       .lean();
 
     const total = await this.productModel.count(filters);
