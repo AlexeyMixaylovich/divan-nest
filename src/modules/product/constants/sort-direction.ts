@@ -1,4 +1,4 @@
 export enum EDirection {
-  ASC = 1,
-  DESC = -1,
+  ASC = 'asc',
+  DESC = 'desc',
 }
