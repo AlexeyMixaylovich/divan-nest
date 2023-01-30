@@ -60,7 +60,7 @@ export class ProductService {
     if (!sortObject[ESortField.UPDATED_AT]) {
       sortObject[ESortField.UPDATED_AT] = EDirection.DESC;
     }
-    console.log(sortObject);
+
     const products = await this.productModel
       .find(filters)
       .skip(navigate.skip)
