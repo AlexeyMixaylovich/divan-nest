@@ -10,6 +10,7 @@ import {
   getCategoryWithPageUrl,
   getUrl,
 } from 'src/helpers/url';
+
 import { ProductService } from '../product/product.service';
 import { EProductPath } from './constants/product-path';
 import { parsePrice } from './helpers/price';
@@ -22,10 +23,11 @@ export class ParserService {
   constructor(private readonly productService: ProductService) {}
 
   private async getImageUrl(url: string): Promise<string> {
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(url, { timeout: 5000 });
     const meta = parse(data)
       .getElementsByTagName('meta')
       .find((el) => el?.attrs?.property === 'og:image');
+
     return meta?.attrs?.content || '';
   }
 
@@ -60,7 +62,9 @@ export class ParserService {
 
   async parseData() {
     this.logger.log('parseData START');
-    for (const { code } of CATEGORIES) {
+    for (const { code, name } of CATEGORIES) {
+      this.logger.log(`parse ${name}`);
+
       await this.productService.setIsDeletedByCategory(code);
 
       const url = getCategoryUrl(code);
@@ -82,5 +86,21 @@ export class ParserService {
       }
     }
     this.logger.log('parseData DONE');
+  }
+
+  loadImg() {
+    this.logger.log('loadImg START');
+
+    const cursor = this.productService.updateImgCursor();
+    cursor.eachAsync(async (product) => {
+      try {
+        const imageUlr = await this.getImageUrl(product.url);
+        product.imageUlr = imageUlr;
+        await product.save({ timestamps: false });
+        this.logger.log(product);
+      } catch (error) {
+        this.logger.error(error);
+      }
+    });
   }
 }
