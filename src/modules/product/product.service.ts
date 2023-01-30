@@ -53,21 +53,19 @@ export class ProductService {
     products: LeanDocument<ProductDocument>[];
     total: number;
   }> {
+    const sortObject = sort.reduce((t, { direction, field }) => {
+      t[field] = direction;
+      return t;
+    }, {} as Record<ESortField, EDirection>);
+    if (!sortObject[ESortField.UPDATED_AT]) {
+      sortObject[ESortField.UPDATED_AT] = EDirection.DESC;
+    }
+    console.log(sortObject);
     const products = await this.productModel
       .find(filters)
       .skip(navigate.skip)
       .limit(navigate.limit || 100)
-      .sort(
-        sort.reduce(
-          (t, { direction, field }) => {
-            t[field] = direction;
-            return t;
-          },
-          {
-            [ESortField.UPDATED_AT]: EDirection.ASC,
-          } as Record<ESortField, EDirection>,
-        ),
-      )
+      .sort(sortObject)
       .lean();
 
     const total = await this.productModel.count(filters);
