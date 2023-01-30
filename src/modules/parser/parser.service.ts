@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
 import { get } from 'lodash';
 
@@ -17,6 +17,8 @@ import { TProduct } from './types/fetch-product';
 
 @Injectable()
 export class ParserService {
+  private readonly logger = new Logger(ParserService.name);
+
   constructor(private readonly productService: ProductService) {}
 
   private async getImageUrl(url: string): Promise<string> {
@@ -57,6 +59,7 @@ export class ParserService {
   }
 
   async parseData() {
+    this.logger.log('parseData START');
     for (const { code } of CATEGORIES) {
       await this.productService.setIsDeletedByCategory(code);
 
@@ -78,5 +81,6 @@ export class ParserService {
         }
       }
     }
+    this.logger.log('parseData DONE');
   }
 }

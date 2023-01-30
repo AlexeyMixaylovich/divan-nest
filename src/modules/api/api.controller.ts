@@ -11,15 +11,15 @@ export class ApiController {
     private readonly parserService: ParserService,
   ) {}
 
-  @Get()
-  async getHello(): Promise<string> {
-    await this.parserService.parseData();
-    return 'this.productService.getHello()';
-  }
   @Get('product/categories')
   getCategory(): { items: TCategory[] } {
     return {
       items: [{ name: 'all', code: '' }, ...CATEGORIES],
     };
+  }
+  @Get('parser/load/products')
+  loadProducts(): string {
+    this.parserService.parseData();
+    return 'download started';
   }
 }
