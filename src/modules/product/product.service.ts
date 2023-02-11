@@ -6,6 +6,7 @@ import { TCategory } from 'src/types/categories';
 import { TProduct } from '../parser/types/fetch-product';
 import { EDirection } from './constants/sort-direction';
 import { ESortField } from './constants/sort-field';
+import { GetProductsDto } from './dto/get-products.dto';
 import { TGetProductsArguments } from './types/product-list';
 
 @Injectable()
@@ -49,7 +50,7 @@ export class ProductService {
     navigate,
     filters = {},
     sort = [],
-  }: TGetProductsArguments): Promise<{
+  }: GetProductsDto): Promise<{
     products: LeanDocument<ProductDocument>[];
     total: number;
   }> {

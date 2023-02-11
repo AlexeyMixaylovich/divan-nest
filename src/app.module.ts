@@ -1,8 +1,10 @@
 import { Logger, Module } from '@nestjs/common';
-import { ApiModule } from './modules/api/api.module';
+
+import { ParserModule } from './modules/parser/parser.module';
+import { ProductModule } from './modules/product/product.module';
 
 @Module({
   providers: [Logger],
-  imports: [ApiModule],
+  imports: [ProductModule, ParserModule],
 })
 export class AppModule {}

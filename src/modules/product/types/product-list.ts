@@ -1,8 +1,9 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { ProductDocument } from 'src/schemas/product.schema';
 import { EDirection } from '../constants/sort-direction';
 import { ESortField } from '../constants/sort-field';
 
-export type TGetProductsArguments = {
+export class TGetProductsArguments {
   navigate: {
     skip: number;
     limit: number;
@@ -14,4 +15,4 @@ export type TGetProductsArguments = {
     field: ESortField;
     direction: EDirection;
   }[];
-};
+}
