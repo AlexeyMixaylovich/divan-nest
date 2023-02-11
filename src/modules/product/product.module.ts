@@ -7,7 +7,11 @@ import { ProductService } from './product.service';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
-    MongooseModule.forRoot('mongodb://localhost:27017/divan?authSource=admin'),
+    MongooseModule.forRoot(
+      `mongodb://${
+        process.env.MONGO_HOST || 'localhost'
+      }:27017/divan?authSource=admin`,
+    ),
   ],
   controllers: [ProductController],
   providers: [ProductService],
